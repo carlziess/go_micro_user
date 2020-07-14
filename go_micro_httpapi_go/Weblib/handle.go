@@ -54,19 +54,17 @@ func ProdListHandle()gin.HandlerFunc{
 func ProdDetailHandle()gin.HandlerFunc{
 	 return func(c *gin.Context) {
 		 prodService:= c.Keys["prodService"].(Services.ProdService)
-		 //idStr := c.Query("pid")
-		 //id, err := strconv.ParseInt(idStr, 10, 64)
-		 //if err != nil {
-			// c.JSON(http.StatusInternalServerError,gin.H{"status":err.Error()})
-		 //}else {
-		 	req:=new(Services.ProdReq)
-		 	//req.Pid=int32(id)
+		 req:=new(Services.ProdReq)
+		 err := c.BindUri(req)
+		 if err != nil {
+			 c.JSON(http.StatusInternalServerError,gin.H{"status":err.Error()})
+		 }else {
 			 rsp, _ := prodService.GetProdDetail(context.Background(), req)
 			 c.JSON(http.StatusOK,gin.H{
-		 		"data":rsp.Data,
-			})
-		 //}
-
+				 "data":rsp.Data,
+			 })
+		 }
+		recover()
 
 	 }
 }
