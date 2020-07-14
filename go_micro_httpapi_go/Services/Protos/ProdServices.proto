@@ -1,0 +1,16 @@
+syntax="proto3";
+import "Model.proto";
+package Services;
+
+
+message ProdReq{
+  //@inject_tag:form:"size"
+  int32 Size =1;
+}
+message ProdRsp{
+  repeated ProdModel Data =1;
+}
+
+service ProdService{
+  rpc GetProdList(ProdReq)returns (ProdRsp);
+}
