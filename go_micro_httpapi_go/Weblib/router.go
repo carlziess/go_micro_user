@@ -13,6 +13,7 @@ func NewGinRoute(prodservice Services.ProdService)*gin.Engine{
 	prodGroup := ginRoute.Group("/prod")
 	{
 		prodGroup.POST("/list", ProdListHandle())
+		prodGroup.GET("/detail/",ProdDetailHandle())
 	}
 	return ginRoute
 }

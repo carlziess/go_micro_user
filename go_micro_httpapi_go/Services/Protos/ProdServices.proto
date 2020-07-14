@@ -6,11 +6,18 @@ package Services;
 message ProdReq{
   //@inject_tag:form:"size"
   int32 Size =1;
+  //@inject_tag:uri:"pid"
+  int32 Pid=2;
 }
 message ProdRsp{
   repeated ProdModel Data =1;
 }
 
+message ProdDetailRsp{
+  ProdModel Data=1;
+}
+
 service ProdService{
   rpc GetProdList(ProdReq)returns (ProdRsp);
+  rpc GetProdDetail(ProdReq)returns (ProdDetailRsp);
 }

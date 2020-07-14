@@ -29,3 +29,12 @@ func (this *ProdService)GetProdList(ctx context.Context,req *Services.ProdReq,rs
 	rsp.Data=res
 	return nil
 }
+
+
+func (this *ProdService) GetProdDetail(ctx context.Context, in *Services.ProdReq, out *Services.ProdDetailRsp) error {
+	res :=new(Services.ProdModel)
+	res.ProdName="product_"+strconv.Itoa(int(in.Pid))
+	res.ProdID=in.Pid
+	out.Data=res
+	return nil
+}

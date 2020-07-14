@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"http_api/Services"
 	"net/http"
-
 )
 
 func ProdListHandle()gin.HandlerFunc{
@@ -18,6 +17,7 @@ func ProdListHandle()gin.HandlerFunc{
 		if err != nil {
 			ginContext.JSON(http.StatusInternalServerError,gin.H{"status":err.Error()})
 		}else {
+			//因为hystrix中的降级方法中已经给定了返回err为nil 所以这里不需要判断
 			rsp, _ = prodService.GetProdList(context.Background(), &req)
 			ginContext.JSON(http.StatusOK,gin.H{
 				"data":rsp.Data,
@@ -49,4 +49,24 @@ func ProdListHandle()gin.HandlerFunc{
 		//}
 
 	}
+}
+
+func ProdDetailHandle()gin.HandlerFunc{
+	 return func(c *gin.Context) {
+		 prodService:= c.Keys["prodService"].(Services.ProdService)
+		 //idStr := c.Query("pid")
+		 //id, err := strconv.ParseInt(idStr, 10, 64)
+		 //if err != nil {
+			// c.JSON(http.StatusInternalServerError,gin.H{"status":err.Error()})
+		 //}else {
+		 	req:=new(Services.ProdReq)
+		 	//req.Pid=int32(id)
+			 rsp, _ := prodService.GetProdDetail(context.Background(), req)
+			 c.JSON(http.StatusOK,gin.H{
+		 		"data":rsp.Data,
+			})
+		 //}
+
+
+	 }
 }

@@ -1,39 +1,26 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/web"
 	"github.com/micro/go-plugins/registry/consul"
 	"http_api/Services"
 	"http_api/Weblib"
+	"http_api/Wrappers"
 )
 
 //http-api被客户端访问，之后通过rpc从consul中调取注册的grpc服务（业务逻辑）
-
-
-//装饰器wrapper的使用
-type logWrapper struct {
-	client.Client
-}
-func (l *logWrapper) Call(ctx context.Context, req client.Request, rsp interface{}, opts ...client.CallOption) error {
-	fmt.Println("调用接口，日志输出等操作")
-	return l.Client.Call(ctx, req, rsp)
-}
-func NewLogWrapper(c client.Client) client.Client {
-	return &logWrapper{c}
-}
-
 
 func main(){
 	//调取consul中注册的gprc服务
 	myService := micro.NewService(
 		micro.Name("prodServiceClient"),
-		//装饰器wrapper
-		micro.WrapClient(NewLogWrapper),
+		//log装饰器
+		micro.WrapClient(Wrappers.NewLogWrapper),
+		//prod访问时间控制熔断
+		micro.WrapClient(Wrappers.NewProdWrapper),
+
 	)
 	prodService := Services.NewProdService("prods", myService.Client())
 
