@@ -7,6 +7,8 @@ import (
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/metadata"
 	"http_api/Services"
+	"log"
+	"os"
 )
 
 //装饰器wrapper的使用
@@ -16,9 +18,13 @@ type logWrapper struct {
 	client.Client
 }
 func (l *logWrapper) Call(ctx context.Context, req client.Request, rsp interface{}, opts ...client.CallOption) error {
-	fmt.Println("调用接口，日志输出等操作")
+	file, err := os.OpenFile("web.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0777)
+	if err != nil {
+		fmt.Println(err)
+	}
+	log.SetOutput(file)
 	md, _ := metadata.FromContext(ctx)
-	fmt.Printf("[Log Wrapper] ctx: %v service: %s method: %s\n", md, req.Service(), req.Endpoint())
+	log.Printf("[Log Wrapper] ctx: %v service: %s method: %s\n", md, req.Service(), req.Endpoint())
 	return l.Client.Call(ctx, req, rsp)
 }
 

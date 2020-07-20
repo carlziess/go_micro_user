@@ -1,0 +1,4 @@
+[Log Wrapper] ctx: map[Micro-From-Service:prodServiceClient] service: prods method: ProdService.GetProdDetail
+[Log Wrapper] ctx: map[Micro-From-Service:prodServiceClient] service: prods method: ProdService.GetProdList
+Received signal interrupt
+Stopping

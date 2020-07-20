@@ -65,6 +65,5 @@ func ProdDetailHandle()gin.HandlerFunc{
 			 })
 		 }
 		recover()
-
 	 }
 }
